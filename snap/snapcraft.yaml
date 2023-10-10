@@ -1,5 +1,5 @@
 name: console-conf
-base: core22
+base: core24
 summary: console-conf Ubuntu Core first boot experience
 description: |
   console-conf provide device onboarding experience for
@@ -14,7 +14,7 @@ environment:
   PATH: $SNAP/usr/bin:$SNAP/usr/sbin:$PATH
   PYTHONHOME: $SNAP/usr
   PYTHON: $SNAP/usr/bin/python3
-  PYTHONPATH: $SNAP/usr/share/subiquity:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10
+  PYTHONPATH: $SNAP/usr/share/subiquity:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.11
   PYTHONIOENCODING: utf-8
   SUBIQUITY_ROOT: $SNAP
   SNAP_CONFINEMENT: "strict"
@@ -71,7 +71,7 @@ parts:
     plugin: nil
     source: https://github.com/canonical/subiquity.git
     source-type: git
-    source-branch: server/jammy
+    source-branch: main
     override-build: |
       version=$(git describe --tags)
       craftctl set version=${version}
@@ -93,16 +93,19 @@ parts:
     plugin: nil
     stage-packages:
       - libpython3-stdlib
-      - libpython3.10-minimal
-      - libpython3.10-stdlib
+      - libpython3.11-minimal
+      - libpython3.11-stdlib
       - libsystemd0
       - python3
-      - python3.10-minimal
+      - python3.11-minimal
       - python3-aiohttp
       - python3-apport
       - python3-attr
       - python3-bson
+      - python3-chardet
+      - python3-certifi
       - python3-debian
+      - python3-idna
       - python3-jsonschema
       - python3-minimal
       - python3-oauthlib
@@ -112,7 +115,9 @@ parts:
       - python3-pyudev
       - python3-requests
       - python3-requests-unixsocket
+      - python3-six
       - python3-systemd
+      - python3-urllib3
       - python3-urwid
       - python3-yaml
       - python3-yarl
@@ -130,24 +135,26 @@ plugs:
 
 build-packages:
   - apt-utils
-  - devscripts
+  - build-essential
   - debhelper-compat
+  - devscripts
   - dh-python
   - fakeroot
+  - gettext
   - iso-codes
   - libnl-genl-3-dev
   - libnl-route-3-dev
+  - lsb-release
   - pkg-config
   - python3
   - python3-all-dev
-  - python3-attr
   - python3-coverage
   - python3-distutils-extra
   - python3-flake8
   - python3-jsonschema
   - python3-mock
   - python3-nose
+  - python3-pip
   - python3-pyudev
-  - python3-setuptools
   - python3-testtools
   - python3-yaml
