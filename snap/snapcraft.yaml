@@ -87,6 +87,7 @@ parts:
       dpkg -x ${CRAFT_PART_BUILD}/local-debs/subiquitycore_*.deb ${CRAFT_PART_INSTALL}
     stage:
       - usr/share/subiquity/
+      - -usr/share/subiquity/console-conf-wait
 
   python:
     plugin: nil
