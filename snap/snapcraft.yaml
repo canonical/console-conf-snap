@@ -1,0 +1,10 @@
+name: console-conf
+base: core22
+summary: console-conf Ubuntu Core first boot experience
+description: |
+  console-conf provide device onboarding experience for
+  Ubuntu Core systems. User can configure network and
+  assume ownership of the system.
+
+grade: stable
+confinement: strict
