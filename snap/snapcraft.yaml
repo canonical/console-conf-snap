@@ -9,6 +9,35 @@ description: |
 grade: stable
 confinement: strict
 
+parts:
+  python:
+    plugin: nil
+    stage-packages:
+      - libpython3-stdlib
+      - libpython3.10-minimal
+      - libpython3.10-stdlib
+      - libsystemd0
+      - python3
+      - python3.10-minimal
+      - python3-aiohttp
+      - python3-apport
+      - python3-attr
+      - python3-bson
+      - python3-debian
+      - python3-jsonschema
+      - python3-minimal
+      - python3-oauthlib
+      - python3-pkg-resources
+      - python3-pyroute2
+      - python3-pyrsistent
+      - python3-pyudev
+      - python3-requests
+      - python3-requests-unixsocket
+      - python3-systemd
+      - python3-urwid
+      - python3-yaml
+      - python3-yarl
+
 build-packages:
   - apt-utils
   - devscripts
