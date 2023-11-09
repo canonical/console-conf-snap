@@ -10,6 +10,29 @@ grade: stable
 confinement: strict
 
 parts:
+  probert:
+    plugin: nil
+    source: https://github.com/canonical/probert.git
+    source-type: git
+    # following branch server/jammy
+    source-commit: 253acbe1480fba69d12d6e72f53412da79e27410
+    override-build: |
+      unset LD_FLAGS
+      unset LD_LIBRARY_PATH
+      dpkg-buildpackage -b -uc -us -Zgzip -zfast
+      mkdir -p "${CRAFT_PART_BUILD}/local-debs"
+      source="$(dpkg-parsechangelog -SSource)"
+      version="$(dpkg-parsechangelog -SVersion)"
+      arch="$(dpkg --print-architecture)"
+      dcmd mv "../${source}_${version}_${arch}.changes" "${CRAFT_PART_BUILD}/local-debs"
+      cp -r debian/tmp/usr  ${CRAFT_PART_INSTALL}
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/probert_*.deb ${CRAFT_PART_INSTALL}
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/probert-common_*.deb ${CRAFT_PART_INSTALL}
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/probert-network_*.deb ${CRAFT_PART_INSTALL}
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/probert-storage_*.deb ${CRAFT_PART_INSTALL}
+    stage:
+      - usr
+
   python:
     plugin: nil
     stage-packages:
