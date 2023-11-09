@@ -8,6 +8,7 @@ description: |
 
 grade: stable
 confinement: strict
+adopt-info: subiquity
 
 parts:
   probert:
@@ -32,6 +33,27 @@ parts:
       dpkg -x ${CRAFT_PART_BUILD}/local-debs/probert-storage_*.deb ${CRAFT_PART_INSTALL}
     stage:
       - usr
+
+  subiquity:
+    plugin: nil
+    source: https://github.com/canonical/subiquity.git
+    source-type: git
+    source-branch: server/jammy
+    override-build: |
+      version=$(git describe --tags)
+      craftctl set version=${version}
+      unset LD_FLAGS
+      unset LD_LIBRARY_PATH
+      dpkg-buildpackage -b -uc -us -Zgzip -zfast
+      mkdir -p "${CRAFT_PART_BUILD}/local-debs"
+      source="$(dpkg-parsechangelog -SSource)"
+      version="$(dpkg-parsechangelog -SVersion)"
+      arch="$(dpkg --print-architecture)"
+      dcmd mv "../${source}_${version}_${arch}.changes" "${CRAFT_PART_BUILD}/local-debs"
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/console-conf_*.deb ${CRAFT_PART_INSTALL}
+      dpkg -x ${CRAFT_PART_BUILD}/local-debs/subiquitycore_*.deb ${CRAFT_PART_INSTALL}
+    stage:
+      - usr/share/subiquity/
 
   python:
     plugin: nil
