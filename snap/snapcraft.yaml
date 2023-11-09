@@ -83,6 +83,10 @@ parts:
       - python3-yaml
       - python3-yarl
 
+  static:
+    plugin: dump
+    source: static
+
 build-packages:
   - apt-utils
   - devscripts
