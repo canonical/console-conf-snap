@@ -87,6 +87,13 @@ parts:
     plugin: dump
     source: static
 
+plugs:
+  run-console-conf:
+    interface: system-files
+    write:
+      - /run/console-conf
+      - /var/log/console-conf
+
 build-packages:
   - apt-utils
   - devscripts
