@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "${1}" = "apply" ]; then
+  busctl call --quiet --system "io.netplan.Netplan" "/io/netplan/Netplan" "io.netplan.Netplan" "Apply"
+elif [ "${1}" = "try" ]; then
+  busctl call --quiet --system "io.netplan.Netplan" "/io/netplan/Netplan" "io.netplan.Netplan" "Try"
+elif [ "${1}" = "generate" ]; then
+  busctl call --quiet --system "io.netplan.Netplan" "/io/netplan/Netplan" "io.netplan.Netplan" "Generate"
+fi
