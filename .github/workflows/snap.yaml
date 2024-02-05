@@ -19,6 +19,9 @@ jobs:
     - uses: actions/checkout@v4
     - uses: snapcore/action-build@v1
       id: snapcraft
+      with:
+        # edge has a fix for https://bugs.launchpad.net/snapcraft/+bug/2051567
+        snapcraft-channel: latest/edge
     - uses: actions/upload-artifact@v3
       with:
         name: snap
