@@ -136,6 +136,23 @@ plugs:
     write:
       - /run/console-conf
       - /var/log/console-conf
+  terminal-control:
+    interface: custom-device
+
+slots:
+  terminal-devices:
+    interface: custom-device
+    custom-device: terminal-control
+    # XXX this could use x11/wayland/mir interface, but we only need a subset of
+    # the permissions provided by each
+    devices:
+      - /dev/tty[0-9]
+      - /dev/ttyS[0-9]
+    udev-tagging:
+      - kernel: tty[0-9]
+        subsystem: tty
+      - kernel: ttyS[0-9]
+        subsystem: tty
 
 build-packages:
   - apt-utils
