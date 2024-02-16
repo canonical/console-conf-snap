@@ -70,12 +70,10 @@ parts:
 
   subiquity:
     plugin: nil
-    # source: https://github.com/canonical/subiquity.git
-    # TODO replaced with fork from Ondra
-    source: https://github.com/kubiko/subiquity.git
+    source: https://github.com/canonical/subiquity.git
     source-type: git
-    # https://github.com/kubiko/subiquity/commit/9fa8a11647f05eaf62b57613fe35ea98f683e3ed
-    source-commit: 9fa8a11647f05eaf62b57613fe35ea98f683e3ed
+    # https://github.com/canonical/subiquity/commit/c8501d81db29352036761cb130dc50028102dd94
+    source-commit: c8501d81db29352036761cb130dc50028102dd94
     override-build: |
       version=$(git describe --tags)
       craftctl set version=${version}
