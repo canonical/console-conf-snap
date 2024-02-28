@@ -72,8 +72,8 @@ parts:
     plugin: nil
     source: https://github.com/canonical/subiquity.git
     source-type: git
-    # https://github.com/canonical/subiquity/commit/c8501d81db29352036761cb130dc50028102dd94
-    source-commit: c8501d81db29352036761cb130dc50028102dd94
+    # https://github.com/canonical/subiquity/commit/0aaade5c53baf53e25dd4dfe8d003dd42cc395e8
+    source-commit: 0aaade5c53baf53e25dd4dfe8d003dd42cc395e8
     override-build: |
       version=$(git describe --tags)
       craftctl set version=${version}
