@@ -44,6 +44,9 @@ apps:
       - run-console-conf
       - snapd-control
 
+# TODO build probert and console-conf as debs so that dependencies are pulled in
+# automatically
+
 parts:
   probert:
     plugin: nil
