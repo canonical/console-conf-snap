@@ -94,23 +94,26 @@ parts:
   python:
     plugin: nil
     stage-packages:
-      - libpython3-stdlib
-      - libpython3.11-minimal
-      - libpython3.11-stdlib
-      - libsystemd0
       - python3
-      - python3.11-minimal
+      - python3-minimal
+      - python3.12-minimal
+      - libpython3-stdlib
+      - libpython3.12-stdlib
+      - libpython3.12-minimal
+      - libsystemd0
       - python3-aiohttp
       - python3-apport
       - python3-attr
       - python3-bson
-      - python3-chardet
       - python3-certifi
+      - python3-chardet
       - python3-debian
       - python3-idna
       - python3-jsonschema
       - python3-minimal
+      - python3-multidict
       - python3-oauthlib
+      - python3-openssl
       - python3-pkg-resources
       - python3-pyroute2
       - python3-pyrsistent
@@ -119,8 +122,10 @@ parts:
       - python3-requests-unixsocket
       - python3-six
       - python3-systemd
+      - python3-typing-extensions
       - python3-urllib3
       - python3-urwid
+      - python3-wcwidth
       - python3-yaml
       - python3-yarl
 
