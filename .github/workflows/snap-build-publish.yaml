@@ -1,0 +1,39 @@
+name: Snap build
+
+on:
+  push:
+    branches:
+      - main
+  # manual
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: snapcore/action-build@v1
+      id: build
+      with:
+        # edge has a fix for https://bugs.launchpad.net/snapcraft/+bug/2055322
+        snapcraft-channel: latest/edge
+
+    # upload the artifact if further inspection is needed
+    - uses: actions/upload-artifact@v3
+      with:
+        name: snap
+        path: ${{ steps.build.outputs.snap }}
+        retention-days: 5
+
+    # publish to store and release
+    - uses: snapcore/action-publish@v1
+      env:
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+      with:
+        snap: ${{ steps.build.outputs.snap }}
+        # release to latest/edge/main
+        release: edge/main
