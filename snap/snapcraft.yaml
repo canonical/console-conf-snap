@@ -24,14 +24,15 @@ apps:
   console-conf:
     command: usr/bin/python3 $SNAP/usr/share/subiquity/console-conf-tui
     plugs:
+      # TODO: controversial interfaces disabled to enable store uploads
       - hardware-observe
       - log-observe
       - network
       - network-control
       - network-observe
       - network-setup-control
-      - run-console-conf
-      - snapd-control
+      # - run-console-conf
+      # - snapd-control
 
   wait:
     command: usr/share/subiquity/console-conf-wait
@@ -39,10 +40,11 @@ apps:
   write-login-details:
     command: usr/bin/python3 $SNAP/usr/share/subiquity/console-conf-write-login-details
     plugs:
+      # TODO: controversial interfaces disabled to enable store uploads
       - log-observe
       - network-control
-      - run-console-conf
-      - snapd-control
+      # - run-console-conf
+      # - snapd-control
 
 # TODO build probert and console-conf as debs so that dependencies are pulled in
 # automatically
@@ -136,29 +138,31 @@ parts:
     plugin: dump
     source: static
 
-plugs:
-  run-console-conf:
-    interface: system-files
-    write:
-      - /run/console-conf
-      - /var/log/console-conf
-  terminal-control:
-    interface: custom-device
+# TODO: controversial interfaces disabled to enable store uploads
 
-slots:
-  terminal-devices:
-    interface: custom-device
-    custom-device: terminal-control
-    # XXX this could use x11/wayland/mir interface, but we only need a subset of
-    # the permissions provided by each
-    devices:
-      - /dev/tty[0-9]
-      - /dev/ttyS[0-9]
-    udev-tagging:
-      - kernel: tty[0-9]
-        subsystem: tty
-      - kernel: ttyS[0-9]
-        subsystem: tty
+# plugs:
+#   run-console-conf:
+#     interface: system-files
+#     write:
+#       - /run/console-conf
+#       - /var/log/console-conf
+#   terminal-control:
+#     interface: custom-device
+
+# slots:
+#   terminal-devices:
+#     interface: custom-device
+#     custom-device: terminal-control
+#     # XXX this could use x11/wayland/mir interface, but we only need a subset of
+#     # the permissions provided by each
+#     devices:
+#       - /dev/tty[0-9]
+#       - /dev/ttyS[0-9]
+#     udev-tagging:
+#       - kernel: tty[0-9]
+#         subsystem: tty
+#       - kernel: ttyS[0-9]
+#         subsystem: tty
 
 build-packages:
   - apt-utils
