@@ -26,7 +26,6 @@ apps:
     plugs:
       # TODO: controversial interfaces disabled to enable store uploads
       - hardware-observe
-      - log-observe
       - network
       - network-control
       - network-observe
