@@ -32,6 +32,7 @@ apps:
       - network-observe
       - network-setup-control
       # - console-conf-runtime-support
+      # - terminal-control
       # - snapd-control
 
   wait:
