@@ -31,7 +31,7 @@ apps:
       - network-control
       - network-observe
       - network-setup-control
-      # - run-console-conf
+      # - console-conf-runtime-support
       # - snapd-control
 
   wait:
@@ -145,7 +145,7 @@ parts:
 # TODO: controversial interfaces disabled to enable store uploads
 
 # plugs:
-#   run-console-conf:
+#   console-conf-runtime-support:
 #     interface: system-files
 #     write:
 #       - /run/console-conf
