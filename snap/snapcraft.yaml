@@ -37,15 +37,6 @@ apps:
   wait:
     command: usr/share/subiquity/console-conf-wait
 
-  write-login-details:
-    command: usr/bin/python3 $SNAP/usr/share/subiquity/console-conf-write-login-details
-    plugs:
-      # TODO: controversial interfaces disabled to enable store uploads
-      - log-observe
-      - network-control
-      # - run-console-conf
-      # - snapd-control
-
 # TODO build probert and console-conf as debs so that dependencies are pulled in
 # automatically
 
