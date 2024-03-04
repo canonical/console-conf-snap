@@ -17,15 +17,15 @@ can be used:
 
 ```
 $ snap connections
-Interface              Plug                                Slot                    Notes
-hardware-observe       console-conf:hardware-observe       :hardware-observe       manual
-log-observe            console-conf:log-observe            :log-observe            manual
-network                console-conf:network                :network                -
-network-control        console-conf:network-control        :network-control        manual
-network-observe        console-conf:network-observe        :network-observe        manual
-network-setup-control  console-conf:network-setup-control  :network-setup-control  manual
-snapd-control          console-conf:snapd-control          :snapd-control          manual
-system-files           console-conf:run-console-conf       :system-files           manual
+Interface              Plug                                       Slot                           Notes
+custom-device          console-conf:terminal-control              console-conf:terminal-devices  manual
+hardware-observe       console-conf:hardware-observe              :hardware-observe              manual
+network                console-conf:network                       :network                       -
+network-control        console-conf:network-control               :network-control               manual
+network-observe        console-conf:network-observe               :network-observe               manual
+network-setup-control  console-conf:network-setup-control         :network-setup-control         manual
+snapd-control          console-conf:snapd-control                 :snapd-control                 manual
+system-files           console-conf:console-conf-runtime-support  :system-files                  manual
 ```
 
 Once the snap is published to the store and permissions are granted, the
