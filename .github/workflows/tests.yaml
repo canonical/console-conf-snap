@@ -7,6 +7,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 720
     # self-hosted runner so we can access gce from external repos
     runs-on: self-hosted
     steps:
