@@ -1,4 +1,4 @@
-name: Spread tests
+name: Build on LP and run spread tests
 
 on:
   pull_request:
