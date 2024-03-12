@@ -1,4 +1,4 @@
-name: Snap test build
+name: Snap test build (snapcore actions)
 
 on:
   pull_request:
