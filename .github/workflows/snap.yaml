@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}-${{ github.event_name }}
+  group: snapcore-build-${{ github.head_ref || github.run_id }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
