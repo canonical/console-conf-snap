@@ -1,0 +1,21 @@
+name: Build on LP, run spread tests, publish to edge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_to_edge:
+    # self-hosted runner so we can access launchpad
+    runs-on: self-hosted
+    steps:
+      - name: Publish to edge
+        env:
+          LP_CREDENTIALS: ${{ secrets.LP_CREDENTIALS }}
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        uses: snapcore/system-snaps-cicd-tools/action-publish-edge@main
+        with:
+          # TODO enable tests once we have them
+          run_tests: false
+          track: "latest"
