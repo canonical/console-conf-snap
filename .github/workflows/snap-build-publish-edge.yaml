@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: lp-build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish_to_edge:
     # self-hosted runner so we can access launchpad
