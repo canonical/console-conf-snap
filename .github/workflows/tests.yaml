@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}-${{ github.event_name }}
+  group: lp-build-${{ github.head_ref || github.run_id }}-${{ github.event_name }}
   # TODO: how to cancel LP job?
   cancel-in-progress: true
 
