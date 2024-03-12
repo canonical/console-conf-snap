@@ -1,4 +1,4 @@
-name: Snap build
+name: Snap build and publish to edge/main (snapcore actions)
 
 on:
   push:
