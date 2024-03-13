@@ -1,0 +1,99 @@
+summary: smoke test
+
+prepare: |
+  # for various utilities
+  . "$TESTSLIB/nested.sh"
+
+  # Start the nested UC VM
+  start_nested_core_vm_unit
+
+
+execute: |
+  # for various utilities
+  . "$TESTSLIB/nested.sh"
+
+  # expect prompt from console conf on serial
+  wait_for_serial_prompt "$(get_nested_svc_name)" "$WORK_DIR" "Press enter to configure."
+  # wait for console conf setup to complete
+  wait_for_serial_prompt "$(get_nested_svc_name)" "$WORK_DIR" "console-conf tweaks done"
+
+  # the VM may be very slow
+  sleep 30
+
+  mkdir -p screenshots
+
+  nested_vm_screenshot screenshots/01-after-boot.png
+
+  nested_vm_send_raw_input "kp_enter"
+  sleep 30
+
+  # transitioning from the 'Press enter to configure.' screen to actual welcome
+  # displayed by console-conf can take quite a while, try a couple of times.
+  cnt=10
+  while true; do
+      nested_vm_screenshot screenshots/02-welcome.png
+      if ! "$TESTSLIB/tools/imcmp.py" screenshots/02-welcome.png welcome-reference.png \
+              --mask welcome-mask.png; then
+          echo "awaiting output to be similar"
+
+          cnt=$((cnt-1))
+          if [ "$cnt" -eq 0 ]; then
+              echo "timeout waiting for reference screen to appear"
+              exit 1
+          fi
+          sleep 5
+      else
+          # we are at the welcome screen
+          break
+      fi
+  done
+
+  nested_vm_send_raw_input "kp_enter"
+  sleep 30
+
+  nested_vm_screenshot screenshots/03-network-select.png
+  nested_vm_send_raw_input "kp_enter"
+  sleep 30
+
+  nested_vm_screenshot screenshots/04-enter-email.png
+  # XXX this needs an email address associated with a Launchpad account, which
+  # had associated SSH public key uploaded to it. Change for a test email
+  # address once we have one that meets the conditions above.
+  nested_vm_send_input "maciek.borzecki@gmail.com"
+  # moves to Done
+  nested_vm_send_raw_input "kp_enter"
+  # shows welcome screen
+  nested_vm_send_raw_input "kp_enter"
+  sleep 30
+
+  nested_vm_screenshot screenshots/05-user-login-info.png
+  sleep 10
+
+  nested_vm_send_raw_input "kp_enter"
+  sleep 10
+  nested_vm_screenshot screenshots/06-wrapper-login-info.png
+
+  err=0
+  if ! "$TESTSLIB/tools/imcmp.py" \
+      screenshots/05-user-login-info.png \
+      user-login-info-reference.png \
+      --mask user-login-info-mask.png \
+      --diff-output screenshots/05-user-login-info-diff.png; then
+      err=1
+  fi
+
+  if ! "$TESTSLIB/tools/imcmp.py" \
+      screenshots/06-wrapper-login-info.png \
+      wrapper-login-info-reference.png \
+      --mask wrapper-login-info-mask.png \
+      --diff-output screenshots/06-wrapper-login-info-diff.png; then
+      err=1
+  fi
+
+  if [ "$err" != "0" ]; then
+      echo "image differences detected"
+      exit 1
+  fi
+
+artifacts:
+  - screenshots
