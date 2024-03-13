@@ -30,7 +30,8 @@ apps:
       - network-control
       - network-observe
       - network-setup-control
-      # - console-conf-runtime-support
+      # - run-console-conf
+      # - var-log-console-conf
       # - terminal-control
       # - snapd-control
 
@@ -145,10 +146,13 @@ parts:
 # TODO: controversial interfaces disabled to enable store uploads
 
 # plugs:
-#   console-conf-runtime-support:
+#   run-console-conf:
 #     interface: system-files
 #     write:
 #       - /run/console-conf
+#   var-log-console-conf:
+#     interface: system-files
+#     write:
 #       - /var/log/console-conf
 #   terminal-control:
 #     interface: custom-device
