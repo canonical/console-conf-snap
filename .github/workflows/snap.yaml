@@ -47,6 +47,20 @@ jobs:
         # TODO tests for other archs?
         spread -artifacts ./artifacts google-nested:
 
+    - name: Fixup spread artifacts
+      if: always()
+      # upload-artifact does not like : in file or directory names
+      run: |
+        if [ ! -d artifacts ]; then
+            echo "nothing to do"
+            exit 0
+        fi
+
+        shopt -s nullglob
+        for f in ./artifacts/*; do
+            mv -v "$f" "${f//:/-}"
+        done
+
     - uses: actions/upload-artifact@v3
       if: always()
       with:
