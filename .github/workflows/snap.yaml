@@ -25,3 +25,39 @@ jobs:
         name: snap
         path: ${{ steps.build.outputs.snap }}
         retention-days: 5
+
+  test:
+    needs:
+      - build
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v2
+      with:
+        name: snap
+        path: "${{ github.workspace }}/console-conf-artifact"
+    - name: Prepare for spread tests
+      run: |
+        shopt -s nullglob
+        mv -v console-conf-artifact/*.snap console-conf.snap.artifact
+
+    - name: Run spread tests
+      run: |
+        rm -rf ./artifacts
+        # TODO tests for other archs?
+        spread -artifacts ./artifacts google-nested:
+
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-artifacts
+        path: artifacts
+        retention-days: 5
+
+    - name: Discard spread workers
+      if: always()
+      run: |
+        shopt -s nullglob
+        for r in .spread-reuse.*.yaml; do
+          spread -discard -reuse-pid="$(echo "$r" | grep -o -E '[0-9]+')"
+        done
