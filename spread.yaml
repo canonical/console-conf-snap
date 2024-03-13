@@ -1,0 +1,103 @@
+#
+# Copyright (C) 2024 Canonical Ltd
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+project: console-conf
+
+environment:
+  PROJECT_PATH: /home/console-conf
+  SNAP_NAME: console-conf
+  TESTSLIB: $PROJECT_PATH/tests/lib
+  SYSTEMSNAPSTESTLIB: $PROJECT_PATH/cicd/lib
+  TESTSTOOLS: $PROJECT_PATH/cicd/snapd-lib/tools
+  PATH: $PATH:$PROJECT_PATH/tests/bin:$PROJECT_PATH/tests/lib/external/snapd-testing-tools/tools/:$HOME/.local/bin
+  TESTSTMP: /var/tmp/snapd-tools
+  BASE_CHANNEL: '$(HOST: echo "${SPREAD_BASE_CHANNEL:-edge}")'
+  KERNEL_CHANNEL: '$(HOST: echo "${SPREAD_KERNEL_CHANNEL:-edge}")'
+  GADGET_CHANNEL: '$(HOST: echo "${SPREAD_GADGET_CHANNEL:-edge}")'
+  SNAPD_CHANNEL: '$(HOST: echo "${SPREAD_SNAPD_CHANNEL:-edge}")'
+  SETUPDIR: /home/console-conf
+  ENABLE_KVM: '$(HOST: echo "${SPREAD_ENABLE_KVM:-false}")'
+  ENABLE_TPM: false
+  ENABLE_SECURE_BOOT: false
+
+backends:
+  google-nested:
+    type: google
+    key: '$(HOST: echo "$SPREAD_GOOGLE_KEY")'
+    location: snapd-spread/us-east1-b
+    plan: n2-standard-4
+    halt-timeout: 2h
+    systems:
+      - ubuntu-24.04-64:
+          workers: 4
+          image: ubuntu-24.04-64
+          storage: 20G
+
+  lxd-nested:
+    type: lxd
+    systems:
+      - ubuntu-24.04-64:
+          image: ubuntu-daily:24.04
+
+# Put this somewhere where we have read-write access
+path: /home/console-conf
+
+exclude:
+  - .git
+  - '*.img'
+
+prepare: |
+  # Take the MATCH and REBOOT functions from spread and allow our shell
+  # scripts to use them as shell commands. The replacements are real
+  # executables in cicd/snapd-lib/bin (which is on PATH) but they source
+  # spread-funcs.sh written here, base on the definitions provided by SPREAD.
+  # This ensures that 1) spread functions define the code 2) both MATCH and
+  # REBOOT are executables and not functions, and can be called from any
+  # context.
+  # This is not done in prepare.sh as these variables are not exported,
+  # and we do not want to source prepare.sh or export these.
+  type MATCH | tail -n +2 > "$TESTSLIB"/spread-funcs.sh
+  unset MATCH
+  type NOMATCH | tail -n +2 >> "$TESTSLIB"/spread-funcs.sh
+  unset NOMATCH
+
+  # install test tooling
+  sudo apt update -qq
+  sudo apt install python3-pip -y
+  pip3 install tests/lib/tools/vmcli --user --break-system-packages
+  apt install python3-opencv imagemagick -y
+
+debug-each: |
+  journalctl
+  dmesg | grep DENIED || true
+
+# (default is 15 min)
+kill-timeout: 30m
+
+suites:
+  tests/main/:
+    summary: Tests for console-conf running in a VM
+    backends: [ google-nested, lxd-nested ]
+    prepare: |
+      # prepare common uc image setup by repacking snaps, etc
+      "$TESTSLIB"/prepare-uc.sh
+    restore-each: |
+      # delete the nested VM image after each task finishes so we don't use too much
+      # disk space
+      . "$TESTSLIB/nested.sh"
+      cleanup_nested_core_vm
+    debug-each: |
+      . "$TESTSLIB/nested.sh"
+      print_nested_status
