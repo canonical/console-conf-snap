@@ -155,7 +155,8 @@ snap connect console-conf:network-observe
 snap connect console-conf:network-setup-control
 snap connect console-conf:network-control
 snap connect console-conf:snapd-control
-snap connect console-conf:console-conf-runtime-support
+snap connect console-conf:run-console-conf
+snap connect console-conf:var-log-console-conf
 print_system "$(snap connections console-conf)"
 print_system ">>>> console-conf tweaks done <<<<"
 
