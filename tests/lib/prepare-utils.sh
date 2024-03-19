@@ -29,19 +29,6 @@ install_base_deps() {
     sudo snap install ubuntu-image --classic --channel=latest/edge
 }
 
-install_snap_build_deps() {
-    # TODO: https://bugs.launchpad.net/snapd/+bug/1712808
-    # There is a bug in snapd that prevents udev rules from reloading in privileged containers
-    # with the following error message: 'cannot reload udev rules: exit status 1' when installing
-    # snaps. However it seems that retrying the installation fixes it
-    if ! sudo snap install snapcraft --channel="${SNAPCRAFT_CHANNEL:-latest/stable}" --classic; then
-        echo "FIXME: snapcraft install failed, retrying"
-        sudo snap install snapcraft --channel="${SNAPCRAFT_CHANNEL:-latest/stable}" --classic
-    fi
-    sudo snap install lxd
-    sudo lxd init --auto
-}
-
 download_core24_snaps() {
     # get the model
     curl -o ubuntu-core-dangerous.model \
