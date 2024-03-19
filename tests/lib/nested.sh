@@ -9,26 +9,6 @@ execute_remote(){
     sshpass -p ubuntu ssh -p "$SSH_PORT" -o ConnectTimeout=10 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@localhost "$*"
 }
 
-wait_for_ssh(){
-    local service_name="$1"
-    retry=1800
-    wait=1
-    while ! execute_remote true; do
-        if ! systemctl is-active "$service_name"; then
-            echo "Service no longer active"
-            systemctl status "${service_name}" || true
-            return 1
-        fi
-
-        retry=$(( retry - 1 ))
-        if [ $retry -le 0 ]; then
-            echo "Timed out waiting for ssh. Aborting!"
-            return 1
-        fi
-        sleep "$wait"
-    done
-}
-
 wait_for_serial_prompt() {
     local service_name="$1"
     local work_dir="$2"
@@ -54,19 +34,6 @@ wait_for_serial_prompt() {
         tail -10 "$work_dir/serial.log" || true
         sleep "$wait"
     done
-}
-
-nested_wait_for_snap_command(){
-  retry=400
-  wait=1
-  while ! execute_remote command -v snap; do
-      retry=$(( retry - 1 ))
-      if [ $retry -le 0 ]; then
-          echo "Timed out waiting for snap command to be available. Aborting!"
-          exit 1
-      fi
-      sleep "$wait"
-  done
 }
 
 cleanup_nested_core_vm(){
