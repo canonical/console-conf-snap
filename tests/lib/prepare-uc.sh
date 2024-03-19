@@ -3,11 +3,27 @@
 set -e
 set -x
 
+shopt -s nullglob
+
 # include auxiliary functions from this script
 . "$TESTSLIB/prepare-utils.sh"
 
 # install dependencies
 install_base_deps
+
+# build the console-conf snap if it has not been provided to us by CI
+artifacts=("$PROJECT_PATH"/console-conf_*.snap)
+artifacts_cnt="${#artifacts[@]}"
+if [ "$artifacts_cnt" -eq 0 ]; then
+    echo "no console-conf artifact"
+    exit 1
+elif [ "$artifacts_cnt" -gt 1 ]; then
+    echo "found more than one console-conf artifact: ${artifacts[*]}"
+    exit 1
+else
+    # use provided core24 snap
+    cp "${artifacts[0]}" "$(get_snap_name)"
+fi
 
 # download snaps required for us to build the image
 download_core24_snaps
@@ -181,17 +197,6 @@ EOF
 
 snap pack --filename=upstream-pc-gadget.snap "$gadgetdir"
 rm -rf "$gadgetdir"
-
-# build the core24 snap if it has not been provided to us by CI
-if [ ! -f "$PROJECT_PATH/console-conf.snap.artifact" ]; then
-    echo "no artifact"
-    # install_snap_build_deps
-    # build_snap "$PROJECT_PATH"
-    exit 1
-else
-    # use provided core24 snap
-    cp "$PROJECT_PATH/console-conf.snap.artifact" "$(get_snap_name)"
-fi
 
 # finally build the uc image
 build_base_image
