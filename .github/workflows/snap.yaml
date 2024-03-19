@@ -43,7 +43,7 @@ jobs:
     - name: Prepare for spread tests
       run: |
         shopt -s nullglob
-        mv -v console-conf-artifact/*.snap console-conf.snap.artifact
+        mv -v console-conf-artifact/*.snap .
 
     - name: Run spread tests
       run: |
