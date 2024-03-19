@@ -39,15 +39,10 @@ fi
 
 echo 'test ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# next repack / modify the snaps we use in the image, we do this for a few 
-# reasons:
-# 1. we need an automated way to get a user on the system to ssh into regardless
-#    of grade, so we add a systemd service to the snapd snap which will create 
-#    our user we can ssh into the VM with (if we only wanted to test dangerous,
-#    we could use cloud-init).
-
-# first re-pack snapd snap with special systemd service which runs during run 
+# re-pack snapd snap with special systemd service which runs during run
 # mode to create a user for us to inspect the system state
+
+# TODO actually create a user if needed
 
 snapddir=/tmp/snapd-workdir
 unsquashfs -d $snapddir upstream-snapd.snap
@@ -124,6 +119,12 @@ print_system "done setting up ssh for spread test user"
 touch /root/spread-setup-done
 EOF
 chmod 0755 "$snapddir/usr/lib/snapd/snapd.spread-tests-run-mode-tweaks.sh"
+
+# since we're testing console-conf snap which was built by the PR job, we need
+# to establish the required connections manually, hence inject a service which
+# will wait for the seeding to complete and then run snap connect, lastly it
+# will print a message to the serial (/dev/ttyS0) so that we can synchronize
+# with it in the test
 
 cat > "$snapddir/lib/systemd/system/snapd.spread-tests-console-conf-tweaks.service" <<'EOF'
 [Unit]
