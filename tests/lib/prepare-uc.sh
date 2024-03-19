@@ -76,7 +76,7 @@ set -e
 print_system()
 {
     printf "%s spread-tests-run-mode-tweaks.sh: %s\n" "$(date -Iseconds --utc)" "$1" |
-        tee -a /dev/kmsg /dev/console /run/mnt/ubuntu-seed/spread-tests-run-mode-tweaks-log.txt || true
+        tee -a /dev/ttyS0 /run/mnt/ubuntu-seed/spread-tests-run-mode-tweaks-log.txt || true
 }
 # ensure we don't enable ssh in install mode or spread will get confused
 if ! grep 'snapd_recovery_mode=run' /proc/cmdline; then
@@ -146,7 +146,7 @@ set -e
 print_system()
 {
     printf "%s spread-tests-console-conf-tweaks.sh: %s\n" "$(date -Iseconds --utc)" "$1" |
-        tee -a /dev/kmsg /dev/console || true
+        tee -a /dev/ttyS0 /run/mnt/ubuntu-seed/spread-tests-console-conf-log.txt || true
 }
 # ensure we don't enable ssh in install mode or spread will get confused
 if ! grep 'snapd_recovery_mode=run' /proc/cmdline; then
