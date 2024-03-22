@@ -79,6 +79,7 @@ execute: |
       user-login-info-reference.png \
       --mask user-login-info-mask.png \
       --diff-output screenshots/05-user-login-info-diff.png; then
+      echo "user login screen is different"
       err=1
   fi
 
@@ -87,6 +88,7 @@ execute: |
       wrapper-login-info-reference.png \
       --mask wrapper-login-info-mask.png \
       --diff-output screenshots/06-wrapper-login-info-diff.png; then
+      echo "wrapper login information screen is different"
       err=1
   fi
 
