@@ -16,17 +16,19 @@ The following snap interface connections must be established before console-conf
 can be used:
 
 ```
-$ snap connections
-Interface              Plug                                       Slot                           Notes
-custom-device          console-conf:terminal-control              console-conf:terminal-devices  manual
-hardware-observe       console-conf:hardware-observe              :hardware-observe              manual
-network                console-conf:network                       :network                       -
-network-control        console-conf:network-control               :network-control               manual
-network-observe        console-conf:network-observe               :network-observe               manual
-network-setup-control  console-conf:network-setup-control         :network-setup-control         manual
-snapd-control          console-conf:snapd-control                 :snapd-control                 manual
-system-files           console-conf:console-conf-runtime-support  :system-files                  manual
+$ snap connections console-conf
+Interface              Plug                                Slot                           Notes
+custom-device          console-conf:terminal-control       console-conf:terminal-devices  -
+hardware-observe       console-conf:hardware-observe       :hardware-observe              -
+network                console-conf:network                :network                       -
+network-control        console-conf:network-control        :network-control               -
+network-observe        console-conf:network-observe        :network-observe               -
+network-setup-control  console-conf:network-setup-control  :network-setup-control         -
+snapd-control          console-conf:snapd-control          :snapd-control                 -
+system-files           console-conf:run-console-conf       :system-files                  -
+system-files           console-conf:var-log-console-conf   :system-files                  -
 ```
 
-Once the snap is published to the store and permissions are granted, the
-connections will be established automatically.
+For a snap installed from the snap store, the connections should be established
+automatically, however when working with a development version built with
+snapcraft (or some other way), you need to `snap connect` these manually.
