@@ -1,13 +1,11 @@
 name: console-conf
 base: core24
-build-base: devel
 summary: console-conf Ubuntu Core first boot experience
 description: |
   console-conf provide device onboarding experience for
   Ubuntu Core systems. User can configure network and
   assume ownership of the system.
 
-grade: devel
 confinement: strict
 adopt-info: set-metadata
 
