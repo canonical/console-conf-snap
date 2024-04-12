@@ -25,3 +25,4 @@ jobs:
           # https://launchpad.net/~ubuntu-core-service/+snap/core24
           architectures: arm64,amd64,armhf
           spread_suites: "google-nested:"
+          snapcraft_channel: "latest/edge"
