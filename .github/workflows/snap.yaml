@@ -20,7 +20,7 @@ jobs:
         # edge has a fix for https://bugs.launchpad.net/snapcraft/+bug/2055322
         snapcraft-channel: latest/edge
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: snap
         path: ${{ steps.build.outputs.snap }}
@@ -36,7 +36,7 @@ jobs:
         rm -rf "${{ github.workspace }}"
         mkdir "${{ github.workspace }}"
     - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       with:
         name: snap
         path: "${{ github.workspace }}/console-conf-artifact"
@@ -65,7 +65,7 @@ jobs:
             mv -v "$f" "${f//:/-}"
         done
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-artifacts
