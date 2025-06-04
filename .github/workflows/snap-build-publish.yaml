@@ -1,4 +1,4 @@
-name: Snap build and publish to edge/main (snapcore actions)
+name: Release to beta
 
 # manual
 on: workflow_dispatch
