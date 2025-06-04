@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   build_release:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment: store
     steps:
       - name: Build release
