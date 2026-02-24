@@ -1,13 +1,13 @@
 # Security policy
 
-This repository builds and publishes a snap that repackages the `console-conf`
+This repository builds and publishes a snap that repackages the `subiquity`
 package from the official Ubuntu archives for Ubuntu Core systems.
 
 Because this is a repackaging repository, security issues can come from two sources:
 
 - The snap packaging and repository-specific integration (hooks, configuration,
   startup behavior, and patches carried in this repository).
-- The upstream `console-conf` package and other archive-sourced components.
+- The upstream `subiquity` package and other archive-sourced components.
 
 ## Supported versions
 When reporting security issues against this snap, only the latest published
@@ -41,7 +41,7 @@ vulnerability](https://docs.github.com/en/code-security/security-advisories/guid
 for instructions.
 
 For vulnerabilities in Ubuntu archive packages (including upstream
-`console-conf` code), follow Ubuntu's security reporting process:
+`subiquity` code), follow Ubuntu's security reporting process:
 
 - https://ubuntu.com/security/vulnerability-reporting
 
