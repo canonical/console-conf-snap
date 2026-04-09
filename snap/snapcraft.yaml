@@ -1,5 +1,6 @@
 name: console-conf
-base: core24
+base: core26
+build-base: devel
 summary: console-conf Ubuntu Core first boot experience
 description: |
   console-conf provide device onboarding experience for
@@ -7,13 +8,14 @@ description: |
   assume ownership of the system.
 
 confinement: strict
+grade: devel
 adopt-info: set-metadata
 
 environment:
   PATH: $SNAP/usr/bin:$SNAP/usr/sbin:$PATH
   PYTHONHOME: $SNAP/usr
   PYTHON: $SNAP/usr/bin/python3
-  PYTHONPATH: $SNAP/usr/share/subiquity:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.11
+  PYTHONPATH: $SNAP/usr/share/subiquity:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.14
   PYTHONIOENCODING: utf-8
   SUBIQUITY_ROOT: $SNAP
   SNAP_CONFINEMENT: "strict"
@@ -44,8 +46,7 @@ parts:
     plugin: nil
     source: https://github.com/canonical/probert.git
     source-type: git
-    # following branch core/jammy
-    source-commit: 94be2fa3f45e766ecee526fdc0c15f65a78667e6
+    source-branch: main
     override-build: |
       unset LD_FLAGS
       unset LD_LIBRARY_PATH
@@ -67,9 +68,7 @@ parts:
     plugin: nil
     source: https://github.com/canonical/subiquity.git
     source-type: git
-    # commit including relicense to GPL3
-    # https://github.com/canonical/subiquity/commit/86bce5c5e27b99df6ce6e79fc457f6f9828247ca
-    source-commit: 86bce5c5e27b99df6ce6e79fc457f6f9828247ca
+    source-branch: ubuntu/resolute
     override-build: |
       version=$(git describe --tags)
       unset LD_FLAGS
@@ -105,10 +104,10 @@ parts:
     stage-packages:
       - python3
       - python3-minimal
-      - python3.12-minimal
+      - python3.14-minimal
       - libpython3-stdlib
-      - libpython3.12-stdlib
-      - libpython3.12-minimal
+      - libpython3.14-stdlib
+      - libpython3.14-minimal
       - libsystemd0
       - python3-aiohttp
       - python3-apport
@@ -122,6 +121,7 @@ parts:
       - python3-minimal
       - python3-multidict
       - python3-oauthlib
+      - python3-passlib
       - python3-openssl
       - python3-pkg-resources
       - python3-pyroute2
@@ -193,6 +193,8 @@ build-packages:
   - python3-mock
   - python3-nose
   - python3-pip
+  - python3-parameterized
+  - python3-pyroute2
   - python3-pyudev
   - python3-testtools
   - python3-yaml
