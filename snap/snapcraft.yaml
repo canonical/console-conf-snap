@@ -70,7 +70,6 @@ parts:
     source-type: git
     source-branch: ubuntu/resolute
     override-build: |
-      version=$(git describe --tags)
       unset LD_FLAGS
       unset LD_LIBRARY_PATH
       dpkg-buildpackage -b -uc -us -Zgzip -zfast
@@ -81,7 +80,8 @@ parts:
       dcmd mv "../${source}_${version}_${arch}.changes" "${CRAFT_PART_BUILD}/local-debs"
       dpkg -x ${CRAFT_PART_BUILD}/local-debs/console-conf_*.deb ${CRAFT_PART_INSTALL}
       dpkg -x ${CRAFT_PART_BUILD}/local-debs/subiquitycore_*.deb ${CRAFT_PART_INSTALL}
-      # record the version
+      # record the version (use tags as changelog is not being updated)
+      version=$(git describe --tags)
       echo "${version}" > ${CRAFT_PART_INSTALL}/usr/share/subiquity/version-info
     stage:
       - usr/share/subiquity/
