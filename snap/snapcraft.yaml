@@ -1,6 +1,5 @@
 name: console-conf
 base: core26
-build-base: devel
 summary: console-conf Ubuntu Core first boot experience
 description: |
   console-conf provide device onboarding experience for
@@ -8,7 +7,7 @@ description: |
   assume ownership of the system.
 
 confinement: strict
-grade: devel
+grade: stable
 adopt-info: set-metadata
 
 environment:
